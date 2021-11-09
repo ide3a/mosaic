@@ -1,4 +1,4 @@
-# Eclipse MOSAIC Essentials - <br> The Simulation Suite for Connected and Automated Mobility
+# Eclipse MOSAIC The Simulation Suite for Connected and Automated Mobility
 
 Fork of https://github.com/eclipse/mosaic
 
@@ -7,7 +7,3 @@ Fork of https://github.com/eclipse/mosaic
 ## License
 
 Eclipse MOSAIC is licensed under the [Eclipse Public License Version 2](https://eclipse.org/legal/epl-v20.html).
-
-## Contributing
-
-Before starting with contributions, please see [CONTRIBUTING information](CONTRIBUTING.md).
