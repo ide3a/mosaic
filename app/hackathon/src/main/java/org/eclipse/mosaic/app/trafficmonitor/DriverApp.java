@@ -90,6 +90,7 @@ public class DriverApp extends AbstractApplication<VehicleOperatingSystem> imple
     @Override
     public void onMessageReceived(ReceivedV2xMessage receivedV2xMessage) {
         final V2xMessage msg = receivedV2xMessage.getMessage();
+        getLog().infoSimTime(this, "Received V2X Message", msg);
 
         // Only DEN Messages are handled
         if (!(msg instanceof Denm)) {
@@ -218,7 +219,9 @@ public class DriverApp extends AbstractApplication<VehicleOperatingSystem> imple
 
     private void FlowBreakdown(FlowBreakdownInteraction breakdownInteraction){
         if (getOs().getRoadPosition().getConnectionId().equals(breakdownInteraction.getBreakdownRoadId())){
-            getOs().changeSpeedWithForcedAcceleration(breakdownInteraction.getResultedSpeed(), -10);
+            int interval = 100000;
+            float desSpeed = ((float) breakdownInteraction.getResultedSpeed());
+            getOs().slowDown(desSpeed, interval);;
             getLog().infoSimTime(this, "Vehicle slowed down due to traffic flowbreakdown at road: {}", getOs().getRoadPosition().getConnectionId());
         }
            

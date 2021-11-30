@@ -101,7 +101,7 @@ public class ZeromqAmbassador extends AbstractFederateAmbassador {
         if (interaction.getUpdated().isEmpty())
             return;
 
-        if (rand.nextInt(10000000) > 1){
+        if (rand.nextInt(10000000) > 9999997){
             FlowBreakdownInteraction flowbreakInteraction = new FlowBreakdownInteraction(
                 interaction.getTime() + 1 * TIME.SECOND, null, interaction);
             try {
@@ -116,11 +116,6 @@ public class ZeromqAmbassador extends AbstractFederateAmbassador {
     private List<Double> geoPointConvert(GeoPoint pos){
         List<Double> list = Arrays.asList(pos.getLatitude(), pos.getLongitude());
         return list;
-    }
-
-    private double noiseGenerator(double power){
-        double noise = r.nextGaussian() * Math.sqrt(1/2);
-        return power * noise;
     }
 
     private String createFVDGson(VehicleUpdates interaction){
