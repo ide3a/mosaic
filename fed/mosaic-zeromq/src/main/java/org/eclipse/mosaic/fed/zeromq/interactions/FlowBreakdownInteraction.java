@@ -60,7 +60,8 @@ public final class FlowBreakdownInteraction extends ApplicationInteraction {
 
     public FlowBreakdownInteraction(long time, String unitId, VehicleUpdates interaction) {
         super(time, unitId);
-        determineRoadId(interaction);
+        this.breakdownRoadId = determineRoadId(interaction);
+        this.resultedSpeed = rand.nextInt(3) + 1;
     }
 
     public String getBreakdownRoadId() {
@@ -81,7 +82,7 @@ public final class FlowBreakdownInteraction extends ApplicationInteraction {
         return super.toString();
     }
 
-    private void determineRoadId(VehicleUpdates interaction){
+    private String determineRoadId(VehicleUpdates interaction){
 
         TreeMap<Integer, String> countRoadDensity = new TreeMap<Integer, String>();
         ArrayList<String> roadIdList = new ArrayList<String>();
@@ -104,8 +105,6 @@ public final class FlowBreakdownInteraction extends ApplicationInteraction {
         List<String> candidateRoads = new ArrayList<String>(sorted.values());
 
         String selectedRoad = candidateRoads.get(rand.nextInt(candidateRoads.size()));
-        this.breakdownRoadId = selectedRoad;    
-        this.resultedSpeed = rand.nextInt(3) + 1;
+        return this.breakdownRoadId = selectedRoad;
     }
-
 }

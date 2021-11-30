@@ -33,7 +33,8 @@
                 "VehicleUpdates",
                 "VehicleRoutesInitialization",
                 "VehicleTypesInitialization",
-                "VehicleSeenTrafficSignsUpdate"
+                "VehicleSeenTrafficSignsUpdate",
+                "FlowBreakdownInteraction"
             ],
             "javaClasspathEntries": []
         },

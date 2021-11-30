@@ -1,5 +1,6 @@
 import zmq
 
+
 class ZMessaging():
 
     def __init__(self, frontend: str = "tcp://127.0.0.1:5566"):

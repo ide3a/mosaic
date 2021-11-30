@@ -204,15 +204,12 @@ public class DriverApp extends AbstractApplication<VehicleOperatingSystem> imple
 
     @Override
     public void onSumoTraciResponded(SumoTraciResult sumoTraciResult) {
-        // TODO Auto-generated method stub
         
     }
 
     @Override
     public void onInteractionReceived(ApplicationInteraction applicationInteraction) {
-        if (applicationInteraction.getTypeId().startsWith(FlowBreakdownInteraction.TYPE_ID)) {
-            
-            
+        if (applicationInteraction instanceof FlowBreakdownInteraction) {
             getLog().infoSimTime(this, "FlowBreakdownInteraction received!");
             FlowBreakdown((FlowBreakdownInteraction) applicationInteraction);
         }
@@ -220,9 +217,11 @@ public class DriverApp extends AbstractApplication<VehicleOperatingSystem> imple
     }
 
     private void FlowBreakdown(FlowBreakdownInteraction breakdownInteraction){
-        if (getOs().getRoadPosition().getConnectionId().equals(breakdownInteraction.getBreakdownRoadId()))
+        if (getOs().getRoadPosition().getConnectionId().equals(breakdownInteraction.getBreakdownRoadId())){
             getOs().changeSpeedWithForcedAcceleration(breakdownInteraction.getResultedSpeed(), -10);
             getLog().infoSimTime(this, "Vehicle slowed down due to traffic flowbreakdown at road: {}", getOs().getRoadPosition().getConnectionId());
+        }
+           
 
     }
 

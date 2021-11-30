@@ -26,6 +26,7 @@ import org.eclipse.mosaic.rti.api.parameters.AmbassadorParameter;
 import org.eclipse.mosaic.lib.objects.vehicle.VehicleData;
 import org.eclipse.mosaic.lib.util.objects.ObjectInstantiation;
 import org.eclipse.mosaic.lib.geo.GeoPoint;
+import org.eclipse.mosaic.lib.math.RandomNumberGenerator;
 import org.eclipse.mosaic.fed.zeromq.config.CZeromq;
 import org.eclipse.mosaic.fed.zeromq.device.AmbassadorBroker;
 import org.eclipse.mosaic.fed.zeromq.device.AmbassadorWorker;
@@ -45,9 +46,8 @@ public class ZeromqAmbassador extends AbstractFederateAmbassador {
     private AmbassadorWorker worker;
     private AmbassadorBroker broker;
     private String backend, frontend;
-    private Random r;
-    private double noiseLat;
-    private double noiseLon;
+    private Random rand = new Random();
+
 
     public ZeromqAmbassador(AmbassadorParameter ambassadorParameter) {
         super(ambassadorParameter);
@@ -98,10 +98,12 @@ public class ZeromqAmbassador extends AbstractFederateAmbassador {
         String json = createFVDGson(interaction);
         worker.recvAndSend(json);
 
-        Integer chance = r.nextInt(1000);
-        if (chance.compareTo(998) > 0){
+        if (interaction.getUpdated().isEmpty())
+            return;
+
+        if (rand.nextInt(10000000) > 1){
             FlowBreakdownInteraction flowbreakInteraction = new FlowBreakdownInteraction(
-                interaction.getTime() + 5 * TIME.SECOND, null, interaction);
+                interaction.getTime() + 1 * TIME.SECOND, null, interaction);
             try {
                 this.rti.triggerInteraction(flowbreakInteraction);
             } catch (IllegalValueException | InternalFederateException e) {
@@ -110,16 +112,9 @@ public class ZeromqAmbassador extends AbstractFederateAmbassador {
         }
     }
 
-    private List<Double> geoPointConvert(GeoPoint pos, boolean flagNoise){
-        List<Double> list;
-        if (flagNoise) {
-            noiseLat = noiseGenerator(1E-7);
-            noiseLon = noiseGenerator(1E-7);
-            list = Arrays.asList(pos.getLatitude() + noiseLat, pos.getLongitude() + noiseLon);
-        } else{
-            list = Arrays.asList(pos.getLatitude(), pos.getLongitude());
-        }
 
+    private List<Double> geoPointConvert(GeoPoint pos){
+        List<Double> list = Arrays.asList(pos.getLatitude(), pos.getLongitude());
         return list;
     }
 
@@ -136,7 +131,7 @@ public class ZeromqAmbassador extends AbstractFederateAmbassador {
 
         for (VehicleData vehicle : updated){
             updatedSingle.put("time", vehicle.getTime());
-            updatedSingle.put("position",geoPointConvert(vehicle.getPosition(), false));
+            updatedSingle.put("position",geoPointConvert(vehicle.getPosition()));
             updatedSingle.put("road_id", vehicle.getRoadPosition().getConnectionId());
 
             updatedHash.put(vehicle.getName(), updatedSingle);
