@@ -54,7 +54,7 @@ public class MonitorWarning extends AbstractApplication<RoadSideUnitOperatingSys
     private ArrayList<Connection> connectionList = database.getConnections().stream().collect(Collectors.toCollection(ArrayList::new));
     private ArrayList<String> connectionStrings = new ArrayList<String>();
 
-    private final static long INTERVAL = 500 * TIME.MILLI_SECOND;
+    private final static long INTERVAL = 10 * TIME.MILLI_SECOND;
 
     private String avoidRoadId = "";
 
@@ -126,7 +126,7 @@ public class MonitorWarning extends AbstractApplication<RoadSideUnitOperatingSys
      * @return  
      */
     private Denm constructDenm(String road_id) {
-        final GeoCircle geoCircle = new GeoCircle(getOs().getPosition(), 5000.0D);
+        GeoCircle geoCircle = new GeoCircle(getOs().getPosition(), 5000.0D);
         final MessageRouting routing = getOs().getCellModule().createMessageRouting().geoBroadcastBasedOnUnicast(geoCircle);
 
         return new Denm(routing,
@@ -138,7 +138,7 @@ public class MonitorWarning extends AbstractApplication<RoadSideUnitOperatingSys
                         1,
                         100.0f,
                         0.0f,
-                        null,
+                        getOs().getPosition(),
                         null,
                         null
                 )
