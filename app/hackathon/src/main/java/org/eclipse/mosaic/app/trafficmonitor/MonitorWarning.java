@@ -71,7 +71,7 @@ public class MonitorWarning extends AbstractApplication<RoadSideUnitOperatingSys
         }
 
         warning = new AmbassadorWorker("tcp://127.0.0.1:5555", "service.warning");
-        warningSuccess = new AmbassadorWorker("tcp://127.0.0.1:5555", "service.success");
+        warningSuccess = new AmbassadorWorker("tcp://127.0.0.1:5555", "service.warning_report");
         sample();
     }
 
@@ -87,7 +87,7 @@ public class MonitorWarning extends AbstractApplication<RoadSideUnitOperatingSys
         sample();
     }
 
-    private boolean checkWarningValidity(ZMsg receivedMsg){
+    private Boolean checkWarningValidity(ZMsg receivedMsg){
         if (receivedMsg == null)
             return false;
         ident = receivedMsg.pop();
@@ -107,11 +107,14 @@ public class MonitorWarning extends AbstractApplication<RoadSideUnitOperatingSys
     private void sample() {
         getOs().getEventManager().addEvent(getOs().getSimulationTime() + INTERVAL, this);
         reply = warning.recvOnce();
-        boolean valid = checkWarningValidity(reply);
+        Boolean valid = checkWarningValidity(reply);
+        getLog().infoSimTime(this, String.format("Warning validity: %s", valid.toString()));
+        this.warningSuccess.recvAndSend(valid.toString());
         if (reply instanceof ZMsg)
             reply.clear();
         if (valid) {
             final Denm denm = constructDenm(this.avoidRoadId);
+            getLog().infoSimTime(this, String.format("Valid Road ID: %s", this.avoidRoadId));
             getOs().getCellModule().sendV2xMessage(denm);
         }
     }
