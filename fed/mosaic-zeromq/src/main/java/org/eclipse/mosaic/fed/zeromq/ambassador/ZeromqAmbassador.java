@@ -33,7 +33,9 @@ import org.eclipse.mosaic.fed.zeromq.device.AmbassadorWorker;
 import org.eclipse.mosaic.fed.zeromq.interactions.FlowBreakdownInteraction;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
@@ -112,7 +114,6 @@ public class ZeromqAmbassador extends AbstractFederateAmbassador {
         }
     }
 
-
     private List<Double> geoPointConvert(GeoPoint pos){
         List<Double> list = Arrays.asList(pos.getLatitude(), pos.getLongitude());
         return list;
@@ -120,19 +121,16 @@ public class ZeromqAmbassador extends AbstractFederateAmbassador {
 
     private String createFVDGson(VehicleUpdates interaction){
         Gson gson = new Gson();
-        HashMap<String, Object> updatedSingle = new HashMap<String, Object>();
-        HashMap<String, Object> updatedHash = new HashMap<String, Object>();
         List<VehicleData> updated = interaction.getUpdated();
+        ArrayList<VehicleDataGson> arrayUpdates = new ArrayList<VehicleDataGson>();
+        VehicleUpdatesGson vehGsonObj = new VehicleUpdatesGson(interaction.getTime(), arrayUpdates);
 
         for (VehicleData vehicle : updated){
-            updatedSingle.put("time", vehicle.getTime());
-            updatedSingle.put("position",geoPointConvert(vehicle.getPosition()));
-            updatedSingle.put("road_id", vehicle.getRoadPosition().getConnectionId());
-
-            updatedHash.put(vehicle.getName(), updatedSingle);
+            VehicleDataGson vehData = new VehicleDataGson(geoPointConvert(vehicle.getPosition()),
+                vehicle.getRoadPosition().getConnectionId());
+            vehGsonObj.add(vehData);
         }
-        String json = gson.toJson(updatedHash);
-        return json;
+        return gson.toJson(vehGsonObj);
     }
 
     @Override
