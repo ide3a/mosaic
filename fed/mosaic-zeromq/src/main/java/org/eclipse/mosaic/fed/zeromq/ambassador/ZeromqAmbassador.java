@@ -127,7 +127,8 @@ public class ZeromqAmbassador extends AbstractFederateAmbassador {
 
         for (VehicleData vehicle : updated){
             VehicleDataGson vehData = new VehicleDataGson(geoPointConvert(vehicle.getPosition()),
-                vehicle.getRoadPosition().getConnectionId());
+                vehicle.getRoadPosition().getConnectionId(), vehicle.getRouteId(), vehicle.getLaneAreaId(), 
+                vehicle.getVehicleEmissions().getCurrentEmissions().getCo2());
             vehGsonObj.add(vehData);
         }
         return gson.toJson(vehGsonObj);

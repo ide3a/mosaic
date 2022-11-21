@@ -21,11 +21,17 @@ public class VehicleDataGson {
 
     protected final List<Double> position;
     protected final String roadId;
+    protected final String routeId;
+    protected final String laneAreaId;
+    protected final double vehicleEmissions;  
 
 
-    public VehicleDataGson(List<Double> position, String roadId){
+    public VehicleDataGson(List<Double> position, String roadId, String routeId, String laneAreaId, double vehicleEmissions) {
         this.position = position;
         this.roadId = roadId;
+        this.routeId = routeId;
+        this.laneAreaId = laneAreaId;
+        this.vehicleEmissions = vehicleEmissions;
     }
 
 
@@ -38,6 +44,17 @@ public class VehicleDataGson {
         return roadId;
     }
 
+    public String getRouteId() {
+        return routeId;
+    }
+
+    public String getLaneAreaId(){
+        return laneAreaId;
+    }
+
+    public double getVehicleEmissions() {
+        return vehicleEmissions;
+    }
 
     @Override
     public int hashCode() {
@@ -45,9 +62,15 @@ public class VehicleDataGson {
         int result = 1;
         result = prime * result + ((position == null) ? 0 : position.hashCode());
         result = prime * result + ((roadId == null) ? 0 : roadId.hashCode());
+        result = prime * result + ((routeId == null) ? 0 : routeId.hashCode());
+        result = prime * result + ((laneAreaId == null) ? 0 : laneAreaId.hashCode());
+        result = (int) (prime * result + ((vehicleEmissions == 0.0) ? 0 : Double.doubleToLongBits(vehicleEmissions)));
+        
         return result;
     }
 
+    // hashCode() of a double value
+    // https://stackoverflow.com/questions/113511/hash-code-implementation
 
     @Override
     public boolean equals(Object obj) {
@@ -67,6 +90,21 @@ public class VehicleDataGson {
             if (other.roadId != null)
                 return false;
         } else if (!roadId.equals(other.roadId))
+            return false;
+        if (routeId == null) {
+            if (other.routeId != null)
+                return false;
+        } else if (!routeId.equals(other.routeId))
+            return false;
+        if (laneAreaId == null) {
+            if (other.laneAreaId != null)
+                return false;
+        } else if (!laneAreaId.equals(other.laneAreaId))
+            return false;
+        if (vehicleEmissions == 0.0) {
+            if (other.vehicleEmissions != 0.0)
+                return false;
+        } else if (!(Double.compare(vehicleEmissions, other.vehicleEmissions)==0))
             return false;
         return true;
     }

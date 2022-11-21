@@ -46,7 +46,7 @@ public interface EventScheduler extends EventManager {
     long getScheduledTime();
 
     @Nonnull
-    int scheduleEvents(long time);
+    Integer scheduleEvents(long time);
 
     /**
      * Returns an unmodifiable view of all remaining events.

@@ -1,8 +1,9 @@
 #syntax=docker/dockerfile:1
 
-FROM maven:3-openjdk-11
+#FROM maven:3-openjdk-11
+FROM ubuntu:focal
 
-RUN apt update && apt install -y software-properties-common
+RUN apt update && apt install -y software-properties-common maven
 
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 87637B2A34012D7A
 RUN add-apt-repository "deb http://ppa.launchpad.net/sumo/stable/ubuntu focal Release" -y
@@ -15,7 +16,8 @@ RUN useradd -ms /bin/bash mosaic
 
 EXPOSE 5544
 
-USER mosaic
-WORKDIR /home/mosaic
+USER root
+#WORKDIR /home/root
+#WORKDIR /home/mosaic
 
 CMD /bin/bash

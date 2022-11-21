@@ -69,7 +69,7 @@ public class DefaultEventScheduler implements EventScheduler {
 
     @Override
     @Nonnull
-    public int scheduleEvents(final long time) {
+    public Integer scheduleEvents(final long time) {
         int processedEvents = 0;
         scheduledTime = time;
         while (true) {

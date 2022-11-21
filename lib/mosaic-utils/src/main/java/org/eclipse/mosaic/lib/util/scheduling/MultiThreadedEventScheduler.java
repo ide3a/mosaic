@@ -38,7 +38,7 @@ public class MultiThreadedEventScheduler extends DefaultEventScheduler {
     }
 
     @Override
-    public int scheduleEvents(long time) {
+    public Integer scheduleEvents(long time) {
         if (isEmpty()) {
             return 0;
         }
