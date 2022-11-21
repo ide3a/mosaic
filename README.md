@@ -43,3 +43,8 @@ mvn clean install
 
 mvn clean install -DskipTests
 ```
+or if you get an error during compilation:
+
+```
+mvn clean -DskipTests=true install -X
+```
